@@ -1,0 +1,6 @@
+# Created by venv
+Files/
+venv/
+db.sqlite3
+__pycache__/
+.gitignore/
