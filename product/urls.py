@@ -1,6 +1,9 @@
 from django.urls import path
 from . import views
 
+from django.conf import settings
+from django.conf.urls.static import static
+
 
 app_name ='Produto'
 
@@ -13,8 +16,5 @@ urlpatterns = [
            name="removerdocarrinho"),
     path('carrinho/', views.Carrinho.as_view(), name="carrinho"),
     path('finalizar/', views.Finalizar.as_view(), name="Finalizar"),
-
-
-
-
 ]   
+

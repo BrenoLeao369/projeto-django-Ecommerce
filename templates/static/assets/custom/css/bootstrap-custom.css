@@ -1,0 +1,170 @@
+/* Bootstrap Color Overrides */
+
+/* Primary Color - Green */
+.btn-primary,
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active,
+.btn-primary.active {
+    background-color: #27AE60;
+    border-color: #27AE60;
+}
+
+.btn-primary:hover {
+    background-color: #229954;
+    border-color: #229954;
+}
+
+.btn-primary:focus,
+.btn-primary:active {
+    background-color: #1E8449;
+    border-color: #1E8449;
+    box-shadow: 0 0 0 0.2rem rgba(39, 174, 96, 0.5);
+}
+
+/* Success Button - Green */
+.btn-success {
+    background-color: #27AE60;
+    border-color: #27AE60;
+}
+
+.btn-success:hover {
+    background-color: #229954;
+    border-color: #229954;
+}
+
+.btn-success:focus,
+.btn-success:active {
+    background-color: #1E8449;
+    border-color: #1E8449;
+    box-shadow: 0 0 0 0.2rem rgba(39, 174, 96, 0.5);
+}
+
+/* Alert Colors */
+.alert-success {
+    background-color: #D5F4E6;
+    border-color: #27AE60;
+    color: #145A32;
+}
+
+.alert-success hr {
+    border-top-color: #27AE60;
+}
+
+.alert-success .alert-link {
+    color: #0B4F1F;
+}
+
+/* Badge Colors */
+.badge-success {
+    background-color: #27AE60;
+}
+
+.badge-success[href]:hover,
+.badge-success[href]:focus {
+    background-color: #1E8449;
+}
+
+/* Progress Bar */
+.progress-bar {
+    background-color: #27AE60;
+}
+
+/* Link Colors */
+a {
+    color: #27AE60;
+}
+
+a:hover {
+    color: #1E8449;
+}
+
+/* Form Focus */
+.form-control:focus {
+    border-color: #27AE60;
+    box-shadow: 0 0 0 0.2rem rgba(39, 174, 96, 0.25);
+}
+
+.custom-checkbox .custom-control-input:checked ~ .custom-control-label::before {
+    background-color: #27AE60;
+    border-color: #27AE60;
+}
+
+.custom-radio .custom-control-input:checked ~ .custom-control-label::before {
+    background-color: #27AE60;
+    border-color: #27AE60;
+}
+
+/* Tables */
+.table-hover tbody tr:hover {
+    background-color: #F0F8F4;
+}
+
+.table-primary {
+    background-color: #D5F4E6;
+}
+
+.table-primary th,
+.table-primary td,
+.table-primary thead th {
+    border-color: #27AE60;
+}
+
+/* Pagination */
+.pagination .page-link {
+    color: #27AE60;
+    box-shadow: 2px 2px 2px rgba(0,0,0, 0.4);
+}
+
+.pagination .page-link:hover {
+    color: #1E8449;
+    background-color: #F0F8F4;
+    border-color: #27AE60;
+    
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #27AE60;
+    border-color: #27AE60;
+    
+}
+
+/* Breadcrumb */
+.breadcrumb .active {
+    color: #27AE60;
+}
+
+/* Dropdown */
+.dropdown-menu .dropdown-item:hover,
+.dropdown-menu .dropdown-item:focus {
+    background-color: #F0F8F4;
+    color: #27AE60;
+}
+
+.dropdown-menu .dropdown-item.active,
+.dropdown-menu .dropdown-item:active {
+    background-color: #27AE60;
+}
+
+/* Nav Pills */
+.nav-pills .nav-link.active {
+    background-color: #27AE60;
+}
+
+/* Dark Gray Overrides for Dark Theme */
+.bg-dark {
+    background-color: #1A252F !important;
+}
+
+.text-dark {
+    color: #1A252F !important;
+}
+
+/* Transitions */
+button,
+a,
+input,
+textarea,
+select {
+    transition: all 0.3s ease;
+}

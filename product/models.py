@@ -3,6 +3,7 @@ from PIL import Image
 import os
 from django.conf import settings
 from django.utils.text import slugify
+from utils import utils
 
 # Create your models here.
 class Produto(models.Model):
@@ -23,11 +24,11 @@ class Produto(models.Model):
     )
 
     def get_preco_formatado(self):
-        return f'R$ {self.preco_marketing:.2f}'.replace('.', ',')
+        return utils.formata_preco(self.preco_marketing)
     get_preco_formatado.short_description = "Preço"
 
     def get_preco_promocional_formatado(self):
-        return f'R$ {self.preco_marketing_promocional:.2f}'.replace('.', ',')
+        return utils.formata_preco(self.preco_marketing_promocional)
     get_preco_promocional_formatado.short_description = "Preço Promo"
 
     @staticmethod
@@ -68,7 +69,7 @@ class Variacao(models.Model):
     produto = models.ForeignKey(Produto, on_delete=models.CASCADE)
     nome = models.CharField(max_length=50, blank=True, null=True)
     preco = models.FloatField()
-    preco_prompcional = models.FloatField(default=0)
+    preco_promocional = models.FloatField(default=0)
     estoque = models.PositiveIntegerField(default=1)
 
     def __str__(self):
