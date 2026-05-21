@@ -1,5 +1,7 @@
+{% load essential_filters %}
+
 <nav class="navbar navbar-dark navbar-expand-lg custom-navbar">
-        <a class="navbar-brand" href="index.html">Navbar</a>
+        <a class="navbar-brand" href="{%url 'Produto:lista'%}">E-commerce</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -25,22 +27,24 @@
                         <a class="dropdown-item" href="#">Something else here</a>
                     </div>
                 </li>
+                {% if request.session.carrinho %}
                 <li class="nav-item">
                     <a class="nav-link disabled" href="#">Disabled</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link nav-cart-link active" href="#">
+                    <a class="nav-link nav-cart-link active" href="{% url "Produto:carrinho" %}">
                         <span class="nav-cart-text mr-1">
                             Carrinho
                         </span>
                         <span class="nav-cart-count mr-1">
-                            <strong>109x</strong>
+                            <strong>{{ request.session.carrinho|cart_total_qtd}} X </strong>
                         </span>
                         <span class="nav-cart-icon mr-2">
                             <i class="fas fa-shopping-cart"></i>
                         </span>
                     </a>
                 </li>
+                {% endif %}
             </ul>
             <form class="form-inline my-2 my-lg-0">
                 <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">

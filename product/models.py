@@ -7,6 +7,7 @@ from utils import utils
 
 # Create your models here.
 class Produto(models.Model):
+    id = models.AutoField(primary_key=True)
     nome = models.CharField(max_length=255)
     descricao_curta = models.TextField(max_length=255)
     descricao_longa = models.TextField(blank=True)
