@@ -6,6 +6,7 @@ from django.http import HttpResponse
 from django.contrib import messages
 from django.urls import reverse
 from . import models
+from perfil.models import Perfil
 
 class ListaProdutos(ListView):
     model = models.Produto
@@ -22,7 +23,7 @@ class DetalheProduto(DetailView):
 class AdicionarAoCarrinho(View):
     def get(self, *args, **kwarks):
         http_referer = self.request.META.get(
-            'HTTP_REFERE',
+            'HTTP_REFERER',
             reverse('Produto:lista')
             )
         variacao_id = self.request.GET.get('vid')
@@ -100,11 +101,11 @@ class AdicionarAoCarrinho(View):
         self.request.session.save()
         messages.success(
                 self.request,
-                f'Produto {produto_nome} {variacao_nome} adicionado ao seu carrinho'
-                f'carrinho {carrinho[variacao_id]["quantidade"]}x'
+                f'Produto {produto_nome} {variacao_nome} adicionado ao seu carrinho '
+                f'{carrinho[variacao_id]["quantidade"]}x'
                 )
 
-        return HttpResponse("AdicionarAoCarrinho")
+        return redirect(http_referer)
 
 class RemoverDoCarrinho(View):
     def get(self, *args, **kwarks):
@@ -145,4 +146,29 @@ class Carrinho(View):
 
 class ResumoDaCompra(View):
     def get(self, *args, **kwarks):
-        return HttpResponse("ResumoDaCompra")
+        if not self.request.user.is_authenticated:
+            return redirect("perfil:Criar")
+
+        perfil = Perfil.objects.filter(usuario=self.request.user).exists()
+
+        if not perfil:
+            messages.error(
+                self.request,
+                'usuario sem perfil.'
+            )
+            return redirect("perfil:Criar")
+        
+        if not self.request.session.get('carrinho'):
+            messages.error(
+                self.request,
+                'carrinho vazio.'
+            )
+            return redirect("Produto:lista")
+
+        contexto = {
+            "usuario": self.request.user,
+            "carrinho": self.request.session['carrinho']
+        }
+
+        return render(self.request, 'produto/resumodacompra.html', contexto)
+
