@@ -13,25 +13,26 @@ from product.models import Variacao
 from .models import Pedido, ItemPedido
 # Create your views here.
 
-class DispatchLoginRequired(View):
+class DispatchLoginRequiredMixin(View):
     def dispatch(self, request: HttpRequest, *args: Any, **kwargs: Any):
 
         if not self.request.user.is_authenticated:
             return redirect('perfil:criar')
 
         return super().dispatch(request, *args, **kwargs)
+    
+    def get_queryset(self, *args, **kwargs): 
+        qs = super().get_queryset(*args, **kwargs)
 
-class Pagar(DispatchLoginRequired, DetailView):
+        qs = qs.filter(user=self.request.user)
+        return qs
+
+
+class Pagar(DispatchLoginRequiredMixin, DetailView):
     template_name='pedidos/pagar.html'
     model = Pedido
     pk_url_kwarg = 'pk'
     context_object_name ='pedido'
-
-    def get_queryset(self, *args, **kwargs): 
-        qs = super().get_queryset(*args, **kwargs)
-
-        qs = qs.filter(usuario=self.request.user)
-        return qs
 
     def get_context_data(self, **kwargs):
          context = super().get_context_data(**kwargs)
@@ -171,10 +172,48 @@ class SalvarPedido(View):
 
         return redirect(reverse('pedido:pagar', kwargs={'pk': pedido.pk}))
 
-class Detalhes(View):
-    def get(self, *args, **kwarks):
-        return HttpResponse("Detalhes")
+class Detalhes(DispatchLoginRequiredMixin, DetailView):
+    model = Pedido
+    template_name = 'pedidos/detalhe.html'
+    pk_url_kwarg = 'pk'
+    context_object_name = 'pedido'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        pedido = getattr(self, 'object', None)
+        if pedido is None:
+            raise Http404('Pedido não encontrado')
+
+        itens_qs = ItemPedido.objects.filter(pedido=pedido)
+        itens = []
+        for item in itens_qs:
+            quantidade = item.quantidade or 0
+            try:
+                preco_total = float(item.preco or 0)
+            except Exception:
+                preco_total = 0.0
+            preco_unit = (preco_total / quantidade) if quantidade else 0.0
+            itens.append({
+                'produto': item.produto,
+                'variacao': item.variacao,
+                'imagem': item.imagem,
+                'quantidade': quantidade,
+                'preco_unit': preco_unit,
+                'preco_total': preco_total,
+            })
+
+        context['itens_pedido'] = itens
+        context['total'] = pedido.total
+        context['qtd_total'] = pedido.qtd_total
+        context['status'] = pedido.get_status_display()
+        return context
+
+    def get_queryset(self):
+        return Pedido.objects.filter(user=self.request.user)
     
-class lista(View):
-    def get(self, *args, **kwarks):
-        return HttpResponse("lista")
+class lista(DispatchLoginRequiredMixin, ListView):
+    model = Pedido
+    context_object_name = 'pedidos'
+    template_name = 'pedidos/lista.html'
+    paginate_by = 10
+    ordering = ['-id']

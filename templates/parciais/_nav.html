@@ -17,6 +17,7 @@
                         Perfil
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="{% url 'pedido:lista' %}">Meus pedidos</a>
                         <a class="dropdown-item" href="{% url 'perfil:Criar' %}">Atualizar</a>
                         <a class="dropdown-item" href="{% url 'perfil:logout' %}">Sair</a>
 
@@ -44,9 +45,9 @@
                 </li>
                 {% endif %}
             </ul>
-            <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-success my-2 my-sm-0" type="submit">Search</button>
+            <form class="form-inline my-2 my-lg-0" method="GET" action="{% url 'Produto:busca' %}">
+                <input name="termo" value="{{request.GET.termo}}" class="form-control mr-sm-2" type="search" placeholder="Busca" aria-label="Busca">
+                <button class="btn btn-success my-2 my-sm-0" type="submit">Busca</button>
             </form>
         </div>
     </nav>

@@ -1,3 +1,6 @@
+from typing import Any
+
+from django.db.models.query import QuerySet
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
@@ -7,12 +10,14 @@ from django.contrib import messages
 from django.urls import reverse
 from . import models
 from perfil.models import Perfil
+from django.db.models import Q
 
 class ListaProdutos(ListView):
     model = models.Produto
     template_name = "produto/lista.html"
     context_object_name = 'produtos'
     paginate_by = 10
+    ordering = ['-id']
 
 class DetalheProduto(DetailView):
     model = models.Produto
@@ -172,3 +177,22 @@ class ResumoDaCompra(View):
 
         return render(self.request, 'produto/resumodacompra.html', contexto)
 
+class Busca(ListaProdutos):
+    def get_queryset(self, *args, **kwargs):
+        termo = self.request.GET.get('termo') or self.request.session['termo']
+        qs = super().get_queryset(*args, **kwargs)
+
+        if not termo:
+            return qs
+        
+        self.request.session['termo'] = termo
+         
+        qs = qs.filter(
+            Q(nome__icontains=termo) |
+            Q(descricao_curta__icontains=termo) |
+            Q(descricao_longa__icontains=termo) 
+        )
+
+        self.request.session.save()
+
+        return qs
